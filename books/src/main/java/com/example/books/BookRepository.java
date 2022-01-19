@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 public interface BookRepository extends JpaRepository<Book, String> {
     // new method syntax: <ReturnType> [operation]By[attribute](parameter)
 
-    // find particular Book in arraylist
+    // find particular Book
     Book findBookByid(int id);
+
+    // delete Book by ID
+    String deleteBookByid(int id);
 }

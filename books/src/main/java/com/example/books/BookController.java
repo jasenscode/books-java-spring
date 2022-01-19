@@ -1,15 +1,18 @@
 package com.example.books;
 
+import org.hibernate.sql.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class BookController {
 
     @Autowired
@@ -32,15 +35,16 @@ public class BookController {
     @PostMapping("/book")
     public ResponseEntity<String> addBook(@RequestBody Book book){
         repository.save(book);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Greeting added: " + book.getName());
+        return ResponseEntity.status(HttpStatus.CREATED).body("Book added: " + book.getName());
     }
 
 
     // DELETE Requests
     // Delete a book
-//    @DeleteMapping("books/{id}")
-//    public String removeBook(@PathVariable String id){
-//        books.remove(id);
-//        return "Book deleted: " + id;
-//    }
+    @DeleteMapping("books/{id}")
+    @Transactional
+    public ResponseEntity<String> removeBook(@PathVariable String id){
+        repository.deleteBookByid(Integer.parseInt(id));
+        return ResponseEntity.status(HttpStatus.OK).body("Book with ID " + id + " has been deleted");
+    }
 }
